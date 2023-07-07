@@ -8,8 +8,8 @@ const files = fs.readdirSync(__dirname).filter((item) => item.includes("-"));
 const arr = [];
 
 files.forEach((item) => {
-  const itemPath = path.join(__dirname, item); // 获取项的完整路径
-  const isDirectory = fs.statSync(itemPath).isDirectory(); // 判断是否为文件夹
+  const itemPath = path.join(__dirname, item);
+  const isDirectory = fs.statSync(itemPath).isDirectory();
   if (isDirectory) {
     arr.push(item.split("-")[0]);
   }
