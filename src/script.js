@@ -259,6 +259,7 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setClearColor("#262837");
+renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
 // shadows
 renderer.shadowMap.enabled = true
@@ -273,6 +274,10 @@ bushe2.castShadow = true
 bushe3.castShadow = true
 
 floor.receiveShadow = true
+
+doorLight.shadow.mapSize.width = 256
+doorLight.shadow.mapSize.height = 256
+doorLight.shadow.camera.far = 7
 /**
  * Animate
  */
