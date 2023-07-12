@@ -35,12 +35,12 @@ gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
 
 const cubeTextureLoader = new THREE.CubeTextureLoader();
 const environmentMap = cubeTextureLoader.load([
-  "textures/environmentMaps/0/px.jpg",
-  "textures/environmentMaps/0/nx.jpg",
-  "textures/environmentMaps/0/py.jpg",
-  "textures/environmentMaps/0/ny.jpg",
-  "textures/environmentMaps/0/pz.jpg",
-  "textures/environmentMaps/0/nz.jpg",
+  "textures/environmentMaps/1/px.jpg",
+  "textures/environmentMaps/1/nx.jpg",
+  "textures/environmentMaps/1/py.jpg",
+  "textures/environmentMaps/1/ny.jpg",
+  "textures/environmentMaps/1/pz.jpg",
+  "textures/environmentMaps/1/nz.jpg",
 ]);
 environmentMap.encoding = THREE.sRGBEncoding;
 scene.background = environmentMap;
@@ -59,6 +59,7 @@ const updateAllMaterials = () => {
       // 增加环境贴图的亮度和影响力，使其更加明显
       child.material.envMapIntensity = debugObject.envMapIntensity;
       child.castShadow = true
+      child.receiveShadow = true
     }
   });
 };
@@ -86,6 +87,8 @@ const testSphere = new THREE.Mesh(
 const directionalLight = new THREE.DirectionalLight("#ffffff", 3);
 directionalLight.position.set(0.25, 3, -2.25);
 directionalLight.castShadow = true
+directionalLight.shadow.camera.far = 15
+directionalLight.shadow.mapSize.set(1024,1024)
 scene.add(directionalLight);
 gui
   .add(directionalLight, "intensity")
@@ -112,7 +115,8 @@ gui
   .step(0.1)
   .name("directionalLight-z");
 
-const c = new THREE.CameraHelper()
+const directionaCameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
+scene.add(directionaCameraHelper)
 
 /**
  * Sizes
