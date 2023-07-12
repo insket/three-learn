@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import * as dat from "lil-gui";
 
 /**
@@ -13,6 +14,21 @@ const canvas = document.querySelector("canvas.webgl");
 
 // Scene
 const scene = new THREE.Scene();
+
+let modelGLTF = null;
+const gltfLoader = new GLTFLoader();
+gltfLoader.load("/models/Duck/glTF-Binary/Duck.glb", (gltf) => {
+  modelGLTF = gltf;
+  gltf.scene.position.y = -1.2;
+
+  scene.add(gltf.scene);
+});
+
+const ambientLight = new THREE.AmbientLight("#ffffff", 0.3);
+scene.add(ambientLight);
+const directionalLight = new THREE.DirectionalLight("#ffffff", 0.7);
+directionalLight.position.set(1, 2, 3);
+scene.add(directionalLight);
 
 /**
  * Objects
@@ -73,11 +89,11 @@ window.addEventListener("resize", () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
 
-const mouse = new THREE.Vector2()
+const mouse = new THREE.Vector2();
 window.addEventListener("mousemove", (e) => {
-    mouse.x = e.clientX / sizes.width * 2 - 1
-    mouse.y = -(e.clientY / sizes.height) * 2 + 1
-})
+  mouse.x = (e.clientX / sizes.width) * 2 - 1;
+  mouse.y = -(e.clientY / sizes.height) * 2 + 1;
+});
 
 /**
  * Camera
@@ -117,21 +133,29 @@ const tick = () => {
   object2.position.y = Math.sin(elapsedTime * 0.8) * 1.5;
   object3.position.y = Math.sin(elapsedTime * -1.3) * 1.5;
 
-  raycaster.setFromCamera(mouse,camera)
+  raycaster.setFromCamera(mouse, camera);
 
-//   const rayOrigin = new THREE.Vector3(-3, 0, 0);
-//   const rayDirextion = new THREE.Vector3(1, 0, 0);
-//   rayDirextion.normalize();
-//   raycaster.set(rayOrigin, rayDirextion);
+  //   const rayOrigin = new THREE.Vector3(-3, 0, 0);
+  //   const rayDirextion = new THREE.Vector3(1, 0, 0);
+  //   rayDirextion.normalize();
+  //   raycaster.set(rayOrigin, rayDirextion);
 
-  const intersects = raycaster.intersectObjects([object1,object2,object3])
+  const intersects = raycaster.intersectObjects([object1, object2, object3]);
 
-  for (const obj of [object1,object2,object3]) {
-    obj.material.color.set("#ff0000")
+  for (const obj of [object1, object2, object3]) {
+    obj.material.color.set("#ff0000");
   }
   for (const intersect of intersects) {
-    intersect.object.material.color.set("#0000ff")
+    intersect.object.material.color.set("#0000ff");
+  }
+  if (modelGLTF?.scene) {
+    const modelItersect = raycaster.intersectObject(modelGLTF.scene);
 
+    if(modelItersect.length) {
+      modelGLTF.scene.scale?.set(1.5,1.5,1.5)
+    } else {
+      modelGLTF.scene.scale?.set(1,1,1)
+    }
   }
 
   // Update controls
