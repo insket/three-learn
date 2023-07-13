@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "lil-gui";
+import textVertexShader from "./shaders/test/vertex.glsl";
+import textFragmentShader from "./shaders/test/fragment.glsl";
 
 const gui = new dat.GUI();
 
@@ -10,14 +12,34 @@ const canvas = document.querySelector("canvas.webgl");
 const scene = new THREE.Scene();
 
 const textureLoader = new THREE.TextureLoader();
+const flagTexture = textureLoader.load("/textures/guoqi.jpg")
 
 const geometry = new THREE.PlaneGeometry(1, 1, 32, 32);
 
-const material = new THREE.RawShaderMaterial({
-    
+const count = geometry.attributes.position.count;
+const randoms = new Float32Array(count);
+for (let i = 0; i < count; i++) {
+  randoms[i] = Math.random();
+}
+geometry.setAttribute("aRandom", new THREE.BufferAttribute(randoms, 1));
+
+const material = new THREE.ShaderMaterial({
+  vertexShader: textVertexShader,
+  fragmentShader: textFragmentShader,
+  // transparent: true,
+  uniforms: {
+    uFrequency: { value: new THREE.Vector2(10, 15) },
+    uTime: {value: 0},
+    uColor: {value: new THREE.Color("orange")},
+    uTexture: {value:flagTexture}
+  },
 });
 
+gui.add(material.uniforms.uFrequency.value, "x").min(0).max(20).step(1)
+gui.add(material.uniforms.uFrequency.value, "y").min(0).max(20).step(1)
+
 const mesh = new THREE.Mesh(geometry, material);
+mesh.scale.y = 2/3
 scene.add(mesh);
 
 const sizes = {
@@ -61,6 +83,8 @@ const clock = new THREE.Clock();
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
+
+  material.uniforms.uTime.value = elapsedTime
 
   // Update controls
   controls.update();
