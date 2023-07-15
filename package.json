@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "cannon": "^0.6.2",
+    "gsap": "^3.12.2",
     "lil-gui": "^0.17.0",
     "stats-js": "^1.0.1",
     "three": "^0.148.0",

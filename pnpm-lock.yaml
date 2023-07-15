@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   cannon: ^0.6.2
+  gsap: ^3.12.2
   lil-gui: ^0.17.0
   stats-js: ^1.0.1
   three: ^0.148.0
@@ -10,6 +11,7 @@ specifiers:
 
 dependencies:
   cannon: 0.6.2
+  gsap: 3.12.2
   lil-gui: 0.17.0
   stats-js: 1.0.1
   three: 0.148.0
@@ -235,6 +237,10 @@ packages:
     os: [darwin]
     requiresBuild: true
     optional: true
+
+  /gsap/3.12.2:
+    resolution: {integrity: sha512-EkYnpG8qHgYBFAwsgsGEqvT1WUidX0tt/ijepx7z8EUJHElykg91RvW1XbkT59T0gZzzszOpjQv7SE41XuIXyQ==}
+    dev: false
 
   /lil-gui/0.17.0:
     resolution: {integrity: sha512-MVBHmgY+uEbmJNApAaPbtvNh1RCAeMnKym82SBjtp5rODTYKWtM+MXHCifLe2H2Ti1HuBGBtK/5SyG4ShQ3pUQ==}
